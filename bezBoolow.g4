@@ -1,14 +1,16 @@
-grammar genetical;
+grammar bezBoolow;
 
-file_ : inputBlock blockseq EOF;
+file_:
+    inputBlock blockseq EOF;
 
-blockseq: block+;
+blockseq:
+    block+;
 
 block:
-	variableDefinition
-	| ifBlock
-	| loopBlock
-	| printBlock
+    variableDefinition
+	|ifBlock
+	|loopBlock
+	|printBlock
 	|inputBlock
 	;
 
@@ -16,8 +18,8 @@ printBlock:
     PRINT LPAREN printSeq* RPAREN ENDCHAR;
 
 printSeq:
-    atom|
-    atom (',' atom)*;
+    atom
+    |atom (',' atom)*;
 
 inputBlock:
     INPUT EQ INPUT LPAREN inputSeq RPAREN ENDCHAR;
@@ -26,30 +28,18 @@ inputSeq:
     filename;
 
 filename:
-    QUOTATION FILENAME QUOTATION
-;
+    QUOTATION FILENAME QUOTATION;
+
 variableDefinition:
-    numDefinition|
-    boolDefinition;
-
-numDefinition:
-    NUM_NAME ID_NUM  EQ '12' ENDCHAR|
-    NUM_VARIABLE EQ equation ENDCHAR;
-
-
-boolDefinition:
-    BOOL_VARIABLE EQ expression ENDCHAR|
-    BOOL_VARIABLE EQ ('0'|'1') ENDCHAR;
-
-
+    VARIABLE EQ equation ENDCHAR|
+    VARIABLE EQ expression ENDCHAR;
 
 loopBlock:
     WHILE LPAREN expression RPAREN LPARENCURLY blockseq RPARENCURLY
     ;
 
 ifBlock:
-    IF LPAREN expression RPAREN LPARENCURLY blockseq RPARENCURLY
-    ;
+    IF LPAREN expression RPAREN LPARENCURLY blockseq RPARENCURLY;
 
 expression
     :   expression (OR | AND) expression
@@ -57,7 +47,7 @@ expression
     |   expression (EQ_LOGICAL | NOT_EQ_LOGICAL) expression
     |   LPAREN expression RPAREN
     |   NOT expression
-    |   equation ;
+    |   equation;
 
 equation
    :   equation (TIMES | DIV)  equation
@@ -66,65 +56,28 @@ equation
    |   MINUS? atom
    ;
 
-NUMBER:
-   ('0'..'9')| ('1'..'9')  ('0'..'9')+  ;
 
 atom:
- FLOAT
-   ;
- INT :    '0'..'9'+
-     ;
-
- DOT: '.';
-
- FLOAT
-     :   ('0'..'9')+ '.' ('0'..'9')*
-     |   '.' ('0'..'9')+
-     |   ('0'..'9')+
-     ;
-
-
-//VARIABLE
-//   : BOOL_VARIABLE | NUM_VARIABLE
-//   ;
-
-BOOL_VARIABLE
-    : BOOL_NAME ID_NUM
-    ;
-
-
-NUM_VARIABLE
-    : NUM_NAME ID_NUM
-    ;
-
-NUM_NAME
-    : 'n_'
-    ;
-
-BOOL_NAME
-    : 'b_'
-    ;
-
-ID_NUM
-    : ('1'..'9')('0'..'9')*
-    ;
-
-fragment
-DIGIT   :   ('0'..'9');
-
-//fragment NUMBER
-//    : ('0'..'9')
-//  | ('0' .. '9') + ('.' ('0' .. '9') +)?
-//   ;
-
-fragment UNSIGNED_INTEGER
-   : ('0' .. '9')+
+    NUM  |FLOAT |VARIABLE
    ;
 
+NUM:
+    ('0'..'9')
+    |('1'..'9')+('0'..'9')*;
 
-fragment SIGN
-   : ('+' | '-')
-   ;
+ FLOAT:
+    ('0'..'9')+
+     |('0'..'9')+ '.' ('0'..'9')*
+     |'.' ('0'..'9')+;
+
+VARIABLE:
+    VAR_NAME ID_VAR;
+
+VAR_NAME:
+    'v_';
+
+ID_VAR:
+    ('1'..'9')('0'..'9')*;
 
 
 LPAREN
@@ -186,8 +139,6 @@ EQ_LOGICAL
 NOT_EQ_LOGICAL
    : '!='
    ;
-
-
 
 QUOTATION:
     '"'

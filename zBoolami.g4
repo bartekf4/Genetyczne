@@ -1,5 +1,4 @@
-grammar genetical;
-
+grammar zBoolami;
 file_ : inputBlock blockseq EOF;
 
 blockseq: block+;
@@ -31,15 +30,19 @@ filename:
 variableDefinition:
     numDefinition|
     boolDefinition;
+    numVar:
+    NUM_NAME ID_NUM;
 
 numDefinition:
-    NUM_NAME ID_NUM  EQ '12' ENDCHAR|
+//    numVar EQ FLOAT ENDCHAR|
     NUM_VARIABLE EQ equation ENDCHAR;
 
 
+
 boolDefinition:
-    BOOL_VARIABLE EQ expression ENDCHAR|
-    BOOL_VARIABLE EQ ('0'|'1') ENDCHAR;
+//    BOOL_VARIABLE EQ ('0'|'1') ENDCHAR|
+
+    BOOL_VARIABLE EQ expression ENDCHAR;
 
 
 
@@ -66,36 +69,30 @@ equation
    |   MINUS? atom
    ;
 
-NUMBER:
-   ('0'..'9')| ('1'..'9')  ('0'..'9')+  ;
 
 atom:
- FLOAT
+    NUM  |FLOAT
    ;
- INT :    '0'..'9'+
-     ;
 
- DOT: '.';
+   NUM: ('0'..'9')  |
+   ('1'..'9')+('0'..'9')*;
 
  FLOAT
-     :   ('0'..'9')+ '.' ('0'..'9')*
+      :  ('0'..'9')+
+     |   ('0'..'9')+ '.' ('0'..'9')*
      |   '.' ('0'..'9')+
-     |   ('0'..'9')+
+
      ;
-
-
-//VARIABLE
-//   : BOOL_VARIABLE | NUM_VARIABLE
-//   ;
 
 BOOL_VARIABLE
     : BOOL_NAME ID_NUM
     ;
-
-
 NUM_VARIABLE
     : NUM_NAME ID_NUM
     ;
+
+
+
 
 NUM_NAME
     : 'n_'
@@ -108,23 +105,6 @@ BOOL_NAME
 ID_NUM
     : ('1'..'9')('0'..'9')*
     ;
-
-fragment
-DIGIT   :   ('0'..'9');
-
-//fragment NUMBER
-//    : ('0'..'9')
-//  | ('0' .. '9') + ('.' ('0' .. '9') +)?
-//   ;
-
-fragment UNSIGNED_INTEGER
-   : ('0' .. '9')+
-   ;
-
-
-fragment SIGN
-   : ('+' | '-')
-   ;
 
 
 LPAREN
@@ -186,8 +166,6 @@ EQ_LOGICAL
 NOT_EQ_LOGICAL
    : '!='
    ;
-
-
 
 QUOTATION:
     '"'
