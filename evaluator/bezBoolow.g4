@@ -1,7 +1,7 @@
 grammar bezBoolow;
 
 file_:
-    inputBlock blockseq EOF;
+    blockseq EOF;
 
 blockseq:
     block+;
@@ -15,20 +15,11 @@ block:
 	;
 
 printBlock:
-    PRINT LPAREN printSeq* RPAREN ENDCHAR;
-
-printSeq:
-    atom
-    |atom (',' atom)*;
+    PRINT LPAREN equation RPAREN ENDCHAR;
 
 inputBlock:
-    INPUT EQ INPUT LPAREN inputSeq RPAREN ENDCHAR;
+    VARIABLE EQ INPUT LPAREN  RPAREN ENDCHAR;
 
-inputSeq:
-    filename;
-
-filename:
-    QUOTATION FILENAME QUOTATION;
 
 variableDefinition:
     VARIABLE EQ equation ENDCHAR|
@@ -46,7 +37,6 @@ expression
     |   expression (GT | LT) expression
     |   expression (EQ_LOGICAL | NOT_EQ_LOGICAL) expression
     |   LPAREN expression RPAREN
-    |   NOT expression
     |   equation;
 
 equation
@@ -62,11 +52,11 @@ atom:
    ;
 
 NUM:
-    ('0'..'9')
+    ('1'..'9')
     |('1'..'9')+('0'..'9')*;
 
  FLOAT:
-    ('0'..'9')+
+    ('1'..'9')+
      |('0'..'9')+ '.' ('0'..'9')*
      |'.' ('0'..'9')+;
 
